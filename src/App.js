@@ -42,7 +42,7 @@ function App() {
 	const [time, setTime] = useState("");
 	const [date, setDate] = useState("2021/12/17");
 	const [msg, setMsg] = useState("");
-	const [ip, setIP] = useState("");
+	const [ip, setIP] = useState("000.000.000.000");
 	const [chats, setChats] = useState([]);
 	const [windowDimensions, setWindowDimensions] = useState({
 		width: 500,
@@ -144,7 +144,9 @@ function App() {
 					fontSize: "small",
 					color: "rgba(255, 255, 255, 0.5)",
 					padding: "10px",
+					cursor: "pointer",
 				}}
+				onClick={() => window.open("https://github.com/minr2kb")}
 			>
 				2021 (c) Kyungbae Min
 			</div>
@@ -219,8 +221,8 @@ function App() {
 							className="chat-box"
 							style={{
 								width:
-									windowDimensions.width > 500
-										? "60vw"
+									windowDimensions.width > 700
+										? "50vw"
 										: "80vw",
 							}}
 							key={chat.timestamp}
