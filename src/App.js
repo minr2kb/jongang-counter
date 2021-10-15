@@ -53,6 +53,12 @@ function App() {
 		setMsg(e.target.value);
 	};
 
+	const enter = e => {
+		if (e.key === "Enter") {
+			handleSumbit(e);
+		}
+	};
+
 	const handleSumbit = async e => {
 		e.preventDefault();
 		try {
@@ -171,7 +177,12 @@ function App() {
 							marginBottom: "3rem",
 						}}
 					>
-						{getTime()} 남음
+						<span>{getTime() + "\n"} </span>
+						{windowDimensions.width > 500 ? (
+							<span>남았습니다</span>
+						) : (
+							<div>남았습니다</div>
+						)}
 					</h1>
 					<div>종강 날짜: {date}</div>
 					<div>IP 주소: {ip}</div>
@@ -186,6 +197,7 @@ function App() {
 								windowDimensions.width > 500 ? "40vw" : "80vw",
 						}}
 						onChange={handleOnChange}
+						onKeyPress={enter}
 						value={msg}
 						placeholder="종강에게 한마디"
 					/>
