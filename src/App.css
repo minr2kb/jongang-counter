@@ -1,38 +1,61 @@
+html {
+	background-color: #282c34;
+}
+
 .App {
-  text-align: center;
+	margin-top: 10vh;
+	text-align: center;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* justify-content: center; */
+	/* font-size: calc(10px + 2vmin); */
+	color: white;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.button-submit {
+	font-size: medium;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+	padding-left: 2rem;
+	padding-right: 2rem;
+	margin-left: 1rem;
+	border: 2px solid white;
+	border-radius: 10px;
+	background-color: rgba(255, 255, 255, 0.1);
+	cursor: pointer;
+	transition: all 0.07s ease-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.button-submit:hover {
+	background-color: white;
+	color: #282c34;
+	transition: all 0.07s ease-out;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.input-field {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid darkgray;
+	outline: none;
+	padding: 8px;
+	font-size: large;
+	color: white;
+	width: 30vw;
+	transition: all 0.07s ease-out;
 }
 
-.App-link {
-  color: #61dafb;
+.input-field:focus {
+	border-color: white;
+	transition: all 0.07s ease-out;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.chat-box {
+	width: 60vw;
+	margin-top: 10px;
+	text-align: start;
+	border: solid 1px rgba(255, 255, 255, 0.2);
+	border-radius: 8px;
+	padding: 10px;
 }

@@ -1,25 +1,190 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useEffect, useState } from "react";
+// import Moment from "react-moment";
+import { database } from "./firebase";
+import { ref, push, onValue } from "firebase/database";
+import axios from "axios";
+
+function getWindowDimensions() {
+	const { innerWidth: width, innerHeight: height } = window;
+	return {
+		width,
+		height,
+	};
+}
+
+function getNow() {
+	let today = new Date();
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1;
+	let date = today.getDate();
+	// let day = today.getDay();
+	let hours = today.getHours();
+	let minutes = today.getMinutes();
+	let seconds = today.getSeconds();
+
+	return (
+		year +
+		"/" +
+		month +
+		"/" +
+		date +
+		" " +
+		hours +
+		":" +
+		minutes +
+		":" +
+		seconds
+	);
+}
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [time, setTime] = useState("");
+	const [date, setDate] = useState("2021/12/17");
+	const [msg, setMsg] = useState("");
+	const [ip, setIP] = useState("");
+	const [chats, setChats] = useState([]);
+	const [windowDimensions, setWindowDimensions] = useState({
+		width: 500,
+		height: 500,
+	});
+
+	const handleOnChange = e => {
+		setMsg(e.target.value);
+	};
+
+	const handleSumbit = async e => {
+		e.preventDefault();
+		try {
+			await sendChat({
+				message: msg,
+				timestamp: getNow(),
+				uid: ip,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	function sendChat(data) {
+		if (msg.length > 0) {
+			setMsg("");
+			return push(ref(database, "chats"), {
+				message: data.message,
+				timestamp: data.timestamp,
+				uid: data.uid,
+			});
+		}
+	}
+
+	const getIP = async () => {
+		const res = await axios.get("https://geolocation-db.com/json/");
+		setIP(res.data.IPv4);
+	};
+
+	function getDate() {
+		return "2021/12/17";
+	}
+
+	function getTime() {
+		var jongang = new Date(2021, 11, 17);
+		let today = new Date();
+		let remain = Math.floor((jongang - today) / 1000);
+		let d_days = Math.floor(remain / 86400);
+		let d_hours = Math.floor((remain % 86400) / 3600);
+		let d_mins = Math.floor(((remain % 86400) % 3600) / 60);
+		let d_secs = Math.floor(((remain % 86400) % 3600) % 60);
+
+		return (
+			d_days + "일 " + d_hours + "시간 " + d_mins + "분 " + d_secs + "초 "
+		);
+	}
+
+	useEffect(() => {
+		getIP();
+
+		try {
+			onValue(ref(database, "chats"), snapshot => {
+				if (snapshot.exists()) {
+					setChats(Object.values(snapshot.val()).reverse());
+				} else {
+					console.log("No data available");
+				}
+			});
+		} catch (error) {
+			console.log(error);
+		}
+		setWindowDimensions(getWindowDimensions());
+		function handleResize() {
+			setWindowDimensions(getWindowDimensions());
+		}
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+	useEffect(() => {
+		const countdown = setInterval(() => {
+			setDate(getDate());
+			setTime(getTime());
+		}, 1000);
+		return () => clearInterval(countdown);
+	}, [time]);
+
+	return (
+		<div className="App">
+			<header
+				style={{
+					marginTop: "2rem",
+					marginBottom: "3rem",
+				}}
+			>
+				<h2 style={{ margin: "10px" }}>종강 카운터</h2>
+
+				<h1 style={{ margin: "20px" }}>{getTime()} 남음</h1>
+				<div>종강 날짜: {date}</div>
+				<div>IP 주소: {ip}</div>
+			</header>
+			<div style={{ display: windowDimensions.width > 500 && "flex" }}>
+				<input
+					className="input-field"
+					style={{
+						width: windowDimensions.width > 500 ? "40vw" : "80vw",
+					}}
+					onChange={handleOnChange}
+					value={msg}
+					placeholder="종강에게 한마디"
+				/>
+				<div
+					className="button-submit"
+					onClick={handleSumbit}
+					style={{
+						margin: windowDimensions.width <= 500 && 0,
+						marginTop: windowDimensions.width <= 500 && "10px",
+					}}
+				>
+					Send
+				</div>
+			</div>
+			{/* <span style={{ fontSize: "medium" }}></span> */}
+			<div style={{ marginTop: "20px", marginBottom: "50px" }}>
+				{chats.map(chat => (
+					<div
+						className="chat-box"
+						style={{
+							width:
+								windowDimensions.width > 500 ? "60vw" : "80vw",
+						}}
+						key={chat.timestamp}
+					>
+						<div style={{ fontSize: "small", marginBottom: "5px" }}>
+							{chat.timestamp} ({chat.uid.split(".").splice(-1)})
+						</div>
+						<div style={{ fontSize: "large" }}>{chat.message}</div>
+					</div>
+				))}
+			</div>
+		</div>
+	);
 }
 
 export default App;
