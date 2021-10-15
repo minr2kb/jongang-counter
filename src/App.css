@@ -1,9 +1,10 @@
 html {
 	background-color: #282c34;
+	color: white;
 }
 
 .App {
-	margin-top: 10vh;
+	margin-top: 7vh;
 	text-align: center;
 	min-height: 100vh;
 	display: flex;
@@ -11,7 +12,6 @@ html {
 	align-items: center;
 	/* justify-content: center; */
 	/* font-size: calc(10px + 2vmin); */
-	color: white;
 }
 
 .button-submit {
@@ -25,12 +25,14 @@ html {
 	border-radius: 10px;
 	background-color: rgba(255, 255, 255, 0.1);
 	cursor: pointer;
+	font-weight: 500;
 	transition: all 0.07s ease-out;
 }
 
 .button-submit:hover {
 	background-color: white;
 	color: #282c34;
+	font-weight: 600;
 	transition: all 0.07s ease-out;
 }
 

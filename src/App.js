@@ -131,57 +131,105 @@ function App() {
 	}, [time]);
 
 	return (
-		<div className="App">
-			<header
+		<div>
+			<div
 				style={{
-					marginTop: "2rem",
-					marginBottom: "3rem",
+					textAlign: "end",
+					fontSize: "small",
+					color: "rgba(255, 255, 255, 0.5)",
+					padding: "10px",
 				}}
 			>
-				<h2 style={{ margin: "10px" }}>종강 카운터</h2>
-
-				<h1 style={{ margin: "20px" }}>{getTime()} 남음</h1>
-				<div>종강 날짜: {date}</div>
-				<div>IP 주소: {ip}</div>
-			</header>
-			<div style={{ display: windowDimensions.width > 500 && "flex" }}>
-				<input
-					className="input-field"
+				2021 (c) Kyungbae Min
+			</div>
+			<div className="App">
+				<header
 					style={{
-						width: windowDimensions.width > 500 ? "40vw" : "80vw",
-					}}
-					onChange={handleOnChange}
-					value={msg}
-					placeholder="종강에게 한마디"
-				/>
-				<div
-					className="button-submit"
-					onClick={handleSumbit}
-					style={{
-						margin: windowDimensions.width <= 500 && 0,
-						marginTop: windowDimensions.width <= 500 && "10px",
+						marginBottom: "3rem",
 					}}
 				>
-					Send
-				</div>
-			</div>
-			{/* <span style={{ fontSize: "medium" }}></span> */}
-			<div style={{ marginTop: "20px", marginBottom: "50px" }}>
-				{chats.map(chat => (
-					<div
-						className="chat-box"
+					<h2
+						style={{
+							margin: "10px",
+						}}
+					>
+						<span
+							style={{
+								padding: "10px",
+								borderBottom: "solid 2px white",
+							}}
+						>
+							종강 카운터
+						</span>
+					</h2>
+
+					<h1
+						style={{
+							marginLeft: "20px",
+							marginRight: "20px",
+							marginTop: "4rem",
+							marginBottom: "3rem",
+						}}
+					>
+						{getTime()} 남음
+					</h1>
+					<div>종강 날짜: {date}</div>
+					<div>IP 주소: {ip}</div>
+				</header>
+				<div
+					style={{ display: windowDimensions.width > 500 && "flex" }}
+				>
+					<input
+						className="input-field"
 						style={{
 							width:
-								windowDimensions.width > 500 ? "60vw" : "80vw",
+								windowDimensions.width > 500 ? "40vw" : "80vw",
 						}}
-						key={chat.timestamp}
+						onChange={handleOnChange}
+						value={msg}
+						placeholder="종강에게 한마디"
+					/>
+					<div
+						className="button-submit"
+						onClick={handleSumbit}
+						style={{
+							margin: windowDimensions.width <= 500 && 0,
+							marginTop: windowDimensions.width <= 500 && "10px",
+						}}
 					>
-						<div style={{ fontSize: "small", marginBottom: "5px" }}>
-							{chat.timestamp} ({chat.uid.split(".").splice(-1)})
-						</div>
-						<div style={{ fontSize: "large" }}>{chat.message}</div>
+						Send
 					</div>
-				))}
+				</div>
+				{/* <span style={{ fontSize: "medium" }}></span> */}
+				<div style={{ marginTop: "20px", marginBottom: "50px" }}>
+					{chats.map(chat => (
+						<div
+							className="chat-box"
+							style={{
+								width:
+									windowDimensions.width > 500
+										? "60vw"
+										: "80vw",
+							}}
+							key={chat.timestamp}
+						>
+							<div
+								style={{
+									fontSize: "small",
+									marginBottom: "5px",
+								}}
+							>
+								{chat.timestamp} (
+								{chat.uid.split(".").splice(-1)})
+							</div>
+							<div
+								style={{ fontSize: "large", fontWeight: "500" }}
+							>
+								{chat.message}
+							</div>
+						</div>
+					))}
+				</div>
 			</div>
 		</div>
 	);
