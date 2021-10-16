@@ -348,7 +348,6 @@ function App() {
 				className="kakao_ad_area"
 				style={{
 					display: "none",
-					width: windowDimensions.width > 700 ? "50vw" : "80vw",
 				}}
 				data-ad-unit="DAN-HdyRNU4jp3bRCOV0"
 				data-ad-width="320"
