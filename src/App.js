@@ -248,7 +248,7 @@ function App() {
 						className="input-field"
 						style={{
 							width:
-								windowDimensions.width > 500 ? "40vw" : "80vw",
+								windowDimensions.width > 500 ? "40vw" : "85vw",
 						}}
 						onChange={handleOnChange}
 						onKeyPress={enter}
@@ -279,8 +279,8 @@ function App() {
 									alignItems: "center",
 									width:
 										windowDimensions.width > 700
-											? "50vw"
-											: "80vw",
+											? "60vw"
+											: "85vw",
 								}}
 								key={chats[key].timestamp}
 							>
@@ -296,7 +296,7 @@ function App() {
 									</div>
 									<div
 										style={{
-											fontSize: "large",
+											fontSize: "medium",
 											fontWeight: "500",
 										}}
 									>
