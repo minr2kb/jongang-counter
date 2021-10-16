@@ -1,6 +1,8 @@
 import "./App.css";
 import { useEffect, useState } from "react";
-// import Moment from "react-moment";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { AiTwotoneCalendar } from "react-icons/ai";
 import { database } from "./firebase";
 import { ref, push, onValue } from "firebase/database";
 import axios from "axios";
@@ -18,7 +20,6 @@ function getNow() {
 	let year = today.getFullYear();
 	let month = today.getMonth() + 1;
 	let date = today.getDate();
-	// let day = today.getDay();
 	let hours = today.getHours();
 	let minutes = today.getMinutes();
 	let seconds = today.getSeconds();
@@ -40,7 +41,7 @@ function getNow() {
 
 function App() {
 	const [time, setTime] = useState("");
-	const [date, setDate] = useState("2021/12/17");
+	const [date, setDate] = useState(new Date("2021-12-17"));
 	const [msg, setMsg] = useState("");
 	const [ip, setIP] = useState("000.000.000.000");
 	const [chats, setChats] = useState([]);
@@ -89,11 +90,13 @@ function App() {
 	};
 
 	function getDate() {
-		return "2021/12/17";
+		if (localStorage.getItem("date") !== null) {
+			setDate(new Date(localStorage.getItem("date")));
+		}
 	}
 
 	function getTime() {
-		var jongang = new Date(2021, 11, 17);
+		var jongang = date;
 		let today = new Date();
 		let remain = Math.floor((jongang - today) / 1000);
 		let d_days = Math.floor(remain / 86400);
@@ -108,7 +111,6 @@ function App() {
 
 	useEffect(() => {
 		getIP();
-
 		try {
 			onValue(ref(database, "chats"), snapshot => {
 				if (snapshot.exists()) {
@@ -129,12 +131,22 @@ function App() {
 	}, []);
 
 	useEffect(() => {
+		getDate();
 		const countdown = setInterval(() => {
-			setDate(getDate());
 			setTime(getTime());
 		}, 1000);
 		return () => clearInterval(countdown);
-	}, [time]);
+	}, []);
+
+	const CustomInput = ({ value, onClick }) => (
+		<div style={{ display: "flex", alignItems: "center" }}>
+			<div style={{ marginRight: "3px" }}>{value}</div>
+			<AiTwotoneCalendar
+				style={{ cursor: "pointer" }}
+				onClick={onClick}
+			/>
+		</div>
+	);
 
 	return (
 		<div>
@@ -186,7 +198,29 @@ function App() {
 							<div>남았습니다</div>
 						)}
 					</h1>
-					<div>종강 날짜: {date}</div>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+						}}
+					>
+						<div style={{ marginRight: "5px" }}>종강 날짜:</div>
+						<div>
+							<DatePicker
+								dateFormat="yyyy-MM-dd"
+								selected={date}
+								onChange={date => {
+									setDate(date);
+									localStorage.setItem(
+										"date",
+										date.toString()
+									);
+								}}
+								customInput={<CustomInput />}
+							/>
+						</div>
+					</div>
 					<div>IP 주소: {ip}</div>
 				</header>
 				<div
