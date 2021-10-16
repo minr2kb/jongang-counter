@@ -2,9 +2,9 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { AiTwotoneCalendar } from "react-icons/ai";
+import { AiTwotoneCalendar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { database } from "./firebase";
-import { ref, push, onValue } from "firebase/database";
+import { ref, push, onValue, update } from "firebase/database";
 import axios from "axios";
 
 function getWindowDimensions() {
@@ -44,7 +44,8 @@ function App() {
 	const [date, setDate] = useState(new Date("2021-12-17"));
 	const [msg, setMsg] = useState("");
 	const [ip, setIP] = useState("000.000.000.000");
-	const [chats, setChats] = useState([]);
+	const [chats, setChats] = useState({});
+	const [likes, setLikes] = useState([]);
 	const [windowDimensions, setWindowDimensions] = useState({
 		width: 500,
 		height: 500,
@@ -80,8 +81,36 @@ function App() {
 				message: data.message,
 				timestamp: data.timestamp,
 				uid: data.uid,
+				like: 0,
 			});
 		}
+	}
+
+	function getLikes() {
+		if (localStorage.getItem("likes") !== null) {
+			setLikes(JSON.parse(localStorage.getItem("likes")));
+		}
+	}
+
+	function like(id) {
+		setLikes([...likes, id]);
+		localStorage.setItem("likes", JSON.stringify([...likes, id]));
+		// db 업데이트
+		update(ref(database, "chats/" + id), {
+			like: parseInt(chats[id].like) + 1,
+		});
+	}
+
+	function dislike(id) {
+		setLikes(likes.filter(key => key !== id));
+		localStorage.setItem(
+			"likes",
+			JSON.stringify(likes.filter(key => key !== id))
+		);
+		// db 업데이트
+		update(ref(database, "chats/" + id), {
+			like: parseInt(chats[id].like) - 1,
+		});
 	}
 
 	const getIP = async () => {
@@ -114,7 +143,7 @@ function App() {
 		try {
 			onValue(ref(database, "chats"), snapshot => {
 				if (snapshot.exists()) {
-					setChats(Object.values(snapshot.val()).reverse());
+					setChats(snapshot.val());
 				} else {
 					console.log("No data available");
 				}
@@ -132,6 +161,7 @@ function App() {
 
 	useEffect(() => {
 		getDate();
+		getLikes();
 		const countdown = setInterval(() => {
 			setTime(getTime());
 		}, 1000);
@@ -250,33 +280,80 @@ function App() {
 				</div>
 				{/* <span style={{ fontSize: "medium" }}></span> */}
 				<div style={{ marginTop: "20px", marginBottom: "50px" }}>
-					{chats.map(chat => (
-						<div
-							className="chat-box"
-							style={{
-								width:
-									windowDimensions.width > 700
-										? "50vw"
-										: "80vw",
-							}}
-							key={chat.timestamp}
-						>
+					{Object.keys(chats)
+						.reverse()
+						.map(key => (
 							<div
+								className="chat-box"
 								style={{
-									fontSize: "small",
-									marginBottom: "5px",
+									display: "flex",
+									justifyContent: "space-between",
+									alignItems: "center",
+									width:
+										windowDimensions.width > 700
+											? "50vw"
+											: "80vw",
 								}}
+								key={chats[key].timestamp}
 							>
-								{chat.timestamp} (
-								{chat.uid.split(".").splice(-1)})
+								<div>
+									<div
+										style={{
+											fontSize: "small",
+											marginBottom: "5px",
+										}}
+									>
+										{chats[key].timestamp} (
+										{chats[key].uid.split(".").splice(-1)})
+									</div>
+									<div
+										style={{
+											fontSize: "large",
+											fontWeight: "500",
+										}}
+									>
+										{chats[key].message}
+									</div>
+								</div>
+								<div
+									style={{
+										fontSize: "small",
+										display: "flex",
+										flexDirection:
+											windowDimensions.width <= 700 &&
+											"column",
+										alignItems: "center",
+										justifyItems: "center",
+									}}
+								>
+									{likes.includes(key) ? (
+										<AiFillHeart
+											style={{
+												cursor: "pointer",
+											}}
+											onClick={() => dislike(key)}
+										/>
+									) : (
+										<AiOutlineHeart
+											style={{
+												cursor: "pointer",
+												marginTop: "1px",
+											}}
+											onClick={() => like(key)}
+										/>
+									)}
+									<span
+										style={{
+											marginLeft:
+												windowDimensions.width > 700 &&
+												"2px",
+										}}
+									>
+										{chats[key].like}
+									</span>
+								</div>
 							</div>
-							<div
-								style={{ fontSize: "large", fontWeight: "500" }}
-							>
-								{chat.message}
-							</div>
-						</div>
-					))}
+						))}
 				</div>
 			</div>
 		</div>
