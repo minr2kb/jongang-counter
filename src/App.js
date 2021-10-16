@@ -41,7 +41,7 @@ function getNow() {
 
 function App() {
 	const [time, setTime] = useState("");
-	const [date, setDate] = useState(new Date("2021-12-17 00:00"));
+	const [date, setDate] = useState(new Date("2021-12-17").setHours(0, 0, 0));
 	const [msg, setMsg] = useState("");
 	const [ip, setIP] = useState("000.000.000.000");
 	const [chats, setChats] = useState({});
@@ -120,12 +120,12 @@ function App() {
 
 	function getDate() {
 		if (localStorage.getItem("date") !== null) {
+			console.log(localStorage.getItem("date"));
 			setDate(new Date(localStorage.getItem("date")));
 		}
 	}
 
 	function getTime() {
-		// console.log(date);
 		var jongang = date;
 		let today = new Date();
 		let remain = Math.floor((jongang - today) / 1000);
@@ -140,9 +140,12 @@ function App() {
 	}
 
 	useEffect(() => {
+		// localStorage.removeItem("date");
 		getIP();
 		getDate();
+		setTime(getTime());
 		getLikes();
+
 		try {
 			onValue(ref(database, "chats"), snapshot => {
 				if (snapshot.exists()) {
@@ -230,10 +233,12 @@ function App() {
 								dateFormat="yyyy-MM-dd"
 								selected={date}
 								onChange={date => {
-									setDate(date);
+									setDate(new Date(date.setHours(0, 0, 0)));
 									localStorage.setItem(
 										"date",
-										date.toString()
+										new Date(
+											date.setHours(0, 0, 0)
+										).toString()
 									);
 								}}
 								customInput={<CustomInput />}
