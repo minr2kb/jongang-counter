@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# 종강 카운터
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+전국의 대학생들이 원하고 기다리는 종강, 보고싶은 종강
 
 ## Available Scripts
 
