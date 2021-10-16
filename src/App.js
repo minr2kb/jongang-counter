@@ -188,7 +188,9 @@ function App() {
 					padding: "10px",
 					cursor: "pointer",
 				}}
-				onClick={() => window.open("https://github.com/minr2kb")}
+				onClick={() =>
+					window.open("https://github.com/minr2kb/jongang-counter")
+				}
 			>
 				2021 (c) Kyungbae Min
 			</div>

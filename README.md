@@ -1,70 +1,33 @@
 # 종강 카운터
 
-전국의 대학생들이 원하고 기다리는 종강, 보고싶은 종강
+전국의 대학생들이 원하고 기다리는 종강, 보고싶은 종강.
 
-## Available Scripts
+이제 함께 기다리세요!
 
-In the project directory, you can run:
+## 기능들
 
-### `yarn start`
+### 날짜 카운팅
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+종강까지 남은 시간을 일 부터 초단위 까지 카운트 해줍니다.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+-   기본 종강일자는 제작자의 대학 기준 2021-12-17이며, 날짜 옆 달력 아이콘을 클릭하여 날짜 변경이 가능합니다.
 
-### `yarn test`
+### 종강에게 한마디
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+종강을 보고싶은 마음을 실시간 채팅을 통해 나눌 수 있습니다.
 
-### `yarn build`
+-   채팅을 업로드시 현재 IP주소가 유저 아이디로 등록됩니다.
+-   좋아요 기능을 통해 가장 종강을 향한 마음을 잘 표현한 글을 추천할 수 있습니다.
+-   (주의) 한번 업로드한 글은 삭제가 불가능합니다. 삭제가 정말 필요하다면 저에게 알려주세요!
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 개발 스택
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+-   React.js
+-   Firebase hosting
+-   Firebase realtime database
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 제작자
 
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   [Notion](https://www.notion.so/minr2kb/Kyungbae-s-WorkSPACE-abe63ade54df4651926b6607b9c6f870)
+-   [LinkedIn](https://www.linkedin.com/in/kyungbae-min-5963a921b)
+-   E-mail: kbmin1129@gmail.com
