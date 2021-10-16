@@ -180,20 +180,6 @@ function App() {
 
 	return (
 		<div>
-			<div
-				style={{
-					textAlign: "end",
-					fontSize: "small",
-					color: "rgba(255, 255, 255, 0.5)",
-					padding: "10px",
-					cursor: "pointer",
-				}}
-				onClick={() =>
-					window.open("https://github.com/minr2kb/jongang-counter")
-				}
-			>
-				2021 (c) Kyungbae Min
-			</div>
 			<div className="App">
 				<header
 					style={{
@@ -223,7 +209,7 @@ function App() {
 							marginBottom: "3rem",
 						}}
 					>
-						<span>{getTime() + "\n"} </span>
+						<span>{time + "\n"} </span>
 						{windowDimensions.width > 500 ? (
 							<span>남았습니다</span>
 						) : (
@@ -281,7 +267,7 @@ function App() {
 					</div>
 				</div>
 				{/* <span style={{ fontSize: "medium" }}></span> */}
-				<div style={{ marginTop: "20px", marginBottom: "50px" }}>
+				<div style={{ marginTop: "20px", marginBottom: "30px" }}>
 					{Object.keys(chats)
 						.reverse()
 						.map(key => (
@@ -358,6 +344,34 @@ function App() {
 						))}
 				</div>
 			</div>
+			<ins
+				className="kakao_ad_area"
+				style={{
+					display: "none",
+					width: windowDimensions.width > 700 ? "50vw" : "80vw",
+				}}
+				data-ad-unit="DAN-HdyRNU4jp3bRCOV0"
+				data-ad-width="320"
+				data-ad-height="100"
+			></ins>
+			<footer>
+				<div
+					style={{
+						textAlign: "center",
+						fontSize: "smaller",
+						color: "rgba(255, 255, 255, 0.5)",
+						padding: "10px",
+						cursor: "pointer",
+					}}
+					onClick={() =>
+						window.open(
+							"https://github.com/minr2kb/jongang-counter"
+						)
+					}
+				>
+					© 2021. (Kyungbae Min) all rights reserved
+				</div>
+			</footer>
 		</div>
 	);
 }
