@@ -41,7 +41,7 @@ function getNow() {
 
 function App() {
 	const [time, setTime] = useState("");
-	const [date, setDate] = useState(new Date("2021-12-17"));
+	const [date, setDate] = useState(new Date("2021-12-17 00:00"));
 	const [msg, setMsg] = useState("");
 	const [ip, setIP] = useState("000.000.000.000");
 	const [chats, setChats] = useState({});
@@ -125,6 +125,7 @@ function App() {
 	}
 
 	function getTime() {
+		// console.log(date);
 		var jongang = date;
 		let today = new Date();
 		let remain = Math.floor((jongang - today) / 1000);
@@ -140,6 +141,8 @@ function App() {
 
 	useEffect(() => {
 		getIP();
+		getDate();
+		getLikes();
 		try {
 			onValue(ref(database, "chats"), snapshot => {
 				if (snapshot.exists()) {
@@ -160,13 +163,11 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		getDate();
-		getLikes();
 		const countdown = setInterval(() => {
 			setTime(getTime());
 		}, 1000);
 		return () => clearInterval(countdown);
-	}, []);
+	}, [date]);
 
 	const CustomInput = ({ value, onClick }) => (
 		<div style={{ display: "flex", alignItems: "center" }}>
