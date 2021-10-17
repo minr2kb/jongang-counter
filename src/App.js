@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { AiTwotoneCalendar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { database } from "./firebase";
 import { ref, push, onValue, update } from "firebase/database";
+import { getAuth, signInAnonymously } from "firebase/auth";
 import axios from "axios";
 
 function getWindowDimensions() {
@@ -40,6 +41,7 @@ function getNow() {
 }
 
 function App() {
+	const [uid, setUid] = useState("");
 	const [time, setTime] = useState("");
 	const [date, setDate] = useState(new Date("2021-12-17").setHours(0, 0, 0));
 	const [msg, setMsg] = useState("");
@@ -67,7 +69,8 @@ function App() {
 			await sendChat({
 				message: msg,
 				timestamp: getNow(),
-				uid: ip,
+				ip: ip,
+				uid: uid,
 			});
 		} catch (error) {
 			console.log(error);
@@ -140,6 +143,21 @@ function App() {
 	}
 
 	useEffect(() => {
+		const auth = getAuth();
+		signInAnonymously(auth)
+			.then(() => {
+				setUid(auth.currentUser.uid);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+
+		// onAuthStateChanged(auth, user => {
+		// 	if (user) {
+		// 		const uid = user.uid;
+		// 	} else {
+		// 	}
+		// });
 		// localStorage.removeItem("date");
 		getIP();
 		getDate();
@@ -297,8 +315,9 @@ function App() {
 											marginBottom: "5px",
 										}}
 									>
-										{chats[key].timestamp} (
-										{chats[key].uid.split(".").splice(-1)})
+										{chats[key].timestamp}
+										{/* (
+										{chats[key].uid.split(".").splice(-1)}) */}
 									</div>
 									<div
 										style={{
