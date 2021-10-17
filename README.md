@@ -1,5 +1,7 @@
 # 종강 카운터
 
+[https://jongang-counter.web.app](https://jongang-counter.web.app)
+
 전국의 대학생들이 원하고 기다리는 종강, 보고싶은 종강.
 
 이제 함께 기다리세요!
