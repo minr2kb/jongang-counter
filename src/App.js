@@ -99,9 +99,11 @@ function App() {
 		setLikes([...likes, id]);
 		localStorage.setItem("likes", JSON.stringify([...likes, id]));
 		// db 업데이트
-		update(ref(database, "chats/" + id), {
-			like: parseInt(chats[id].like) + 1,
-		});
+		if (id !== null && id !== undefined && id !== "") {
+			update(ref(database, "chats/" + id), {
+				like: parseInt(chats[id].like) + 1,
+			});
+		}
 	}
 
 	function dislike(id) {
@@ -111,9 +113,11 @@ function App() {
 			JSON.stringify(likes.filter(key => key !== id))
 		);
 		// db 업데이트
-		update(ref(database, "chats/" + id), {
-			like: parseInt(chats[id].like) - 1,
-		});
+		if (id !== null && id !== undefined && id !== "") {
+			update(ref(database, "chats/" + id), {
+				like: parseInt(chats[id].like) - 1,
+			});
+		}
 	}
 
 	const getIP = async () => {
@@ -143,38 +147,30 @@ function App() {
 	}
 
 	useEffect(() => {
+		getIP();
+		getDate();
+		setTime(getTime());
+		getLikes();
 		const auth = getAuth();
 		signInAnonymously(auth)
 			.then(() => {
 				setUid(auth.currentUser.uid);
+				try {
+					onValue(ref(database, "chats"), snapshot => {
+						if (snapshot.exists()) {
+							setChats(snapshot.val());
+						} else {
+							console.log("No data available");
+						}
+					});
+				} catch (error) {
+					console.log(error);
+				}
 			})
 			.catch(error => {
 				console.log(error);
 			});
 
-		// onAuthStateChanged(auth, user => {
-		// 	if (user) {
-		// 		const uid = user.uid;
-		// 	} else {
-		// 	}
-		// });
-		// localStorage.removeItem("date");
-		getIP();
-		getDate();
-		setTime(getTime());
-		getLikes();
-
-		try {
-			onValue(ref(database, "chats"), snapshot => {
-				if (snapshot.exists()) {
-					setChats(snapshot.val());
-				} else {
-					console.log("No data available");
-				}
-			});
-		} catch (error) {
-			console.log(error);
-		}
 		setWindowDimensions(getWindowDimensions());
 		function handleResize() {
 			setWindowDimensions(getWindowDimensions());
