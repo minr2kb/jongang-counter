@@ -86,6 +86,7 @@ function App() {
 				message: data.message,
 				timestamp: data.timestamp,
 				uid: data.uid,
+				ip: data.ip,
 				like: 0,
 			});
 		}
