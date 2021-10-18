@@ -9,8 +9,6 @@ import { ref, push, onValue, update } from "firebase/database";
 import { getAuth, signInAnonymously, signOut } from "firebase/auth";
 import axios from "axios";
 
-const ip_finder = require("ip");
-
 function getWindowDimensions() {
 	const { innerWidth: width, innerHeight: height } = window;
 	return {
@@ -124,13 +122,14 @@ function App() {
 		}
 	}
 
-	const getIP = () => {
-		setIP(ip_finder.address());
+	const getIP = async () => {
+		axios.get("https://api.ipify.org/?format=json").then(function (json) {
+			setIP(json.data["ip"]);
+		});
 	};
 
 	function getDate() {
 		if (localStorage.getItem("date") !== null) {
-			console.log(localStorage.getItem("date"));
 			setDate(new Date(localStorage.getItem("date")));
 		}
 	}
@@ -294,7 +293,7 @@ function App() {
 							marginTop: windowDimensions.width <= 500 && "10px",
 						}}
 					>
-						{isLoaded ? "Send" : "Wait..."}
+						Send
 					</div>
 				</div>
 
