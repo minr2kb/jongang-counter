@@ -1,12 +1,15 @@
 import "./App.css";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import HashLoader from "react-spinners/HashLoader";
 import "react-datepicker/dist/react-datepicker.css";
 import { AiTwotoneCalendar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { database } from "./firebase";
 import { ref, push, onValue, update } from "firebase/database";
-import { getAuth, signInAnonymously } from "firebase/auth";
+import { getAuth, signInAnonymously, signOut } from "firebase/auth";
 import axios from "axios";
+
+const ip_finder = require("ip");
 
 function getWindowDimensions() {
 	const { innerWidth: width, innerHeight: height } = window;
@@ -52,6 +55,7 @@ function App() {
 		width: 500,
 		height: 500,
 	});
+	const [isLoaded, setIsLoaded] = useState(false);
 
 	const handleOnChange = e => {
 		setMsg(e.target.value);
@@ -120,9 +124,8 @@ function App() {
 		}
 	}
 
-	const getIP = async () => {
-		const res = await axios.get("https://geolocation-db.com/json/");
-		setIP(res.data.IPv4);
+	const getIP = () => {
+		setIP(ip_finder.address());
 	};
 
 	function getDate() {
@@ -159,6 +162,7 @@ function App() {
 					onValue(ref(database, "chats"), snapshot => {
 						if (snapshot.exists()) {
 							setChats(snapshot.val());
+							setIsLoaded(true);
 						} else {
 							console.log("No data available");
 						}
@@ -171,6 +175,10 @@ function App() {
 				console.log(error);
 			});
 
+		return () => signOut(auth);
+	}, []);
+
+	useEffect(() => {
 		setWindowDimensions(getWindowDimensions());
 		function handleResize() {
 			setWindowDimensions(getWindowDimensions());
@@ -259,7 +267,7 @@ function App() {
 							/>
 						</div>
 					</div>
-					<div>IP 주소: {ip}</div>
+					<div>내 IP 주소: {ip}</div>
 				</header>
 				<div
 					style={{ display: windowDimensions.width > 500 && "flex" }}
@@ -273,7 +281,10 @@ function App() {
 						onChange={handleOnChange}
 						onKeyPress={enter}
 						value={msg}
-						placeholder="종강에게 한마디"
+						placeholder={
+							isLoaded ? "종강에게 한마디" : "불러오는 중..."
+						}
+						disabled={!isLoaded}
 					/>
 					<div
 						className="button-submit"
@@ -283,86 +294,90 @@ function App() {
 							marginTop: windowDimensions.width <= 500 && "10px",
 						}}
 					>
-						Send
+						{isLoaded ? "Send" : "Wait..."}
 					</div>
 				</div>
-				{/* <span style={{ fontSize: "medium" }}></span> */}
+
 				<div style={{ marginTop: "20px", marginBottom: "30px" }}>
-					{Object.keys(chats)
-						.reverse()
-						.map(key => (
-							<div
-								className="chat-box"
-								style={{
-									display: "flex",
-									justifyContent: "space-between",
-									alignItems: "center",
-									width:
-										windowDimensions.width > 700
-											? "60vw"
-											: "85vw",
-								}}
-								key={chats[key].timestamp}
-							>
-								<div>
+					{isLoaded ? (
+						Object.keys(chats)
+							.reverse()
+							.map(key => (
+								<div
+									className="chat-box"
+									style={{
+										display: "flex",
+										justifyContent: "space-between",
+										alignItems: "center",
+										width:
+											windowDimensions.width > 700
+												? "60vw"
+												: "85vw",
+									}}
+									key={chats[key].timestamp}
+								>
+									<div>
+										<div
+											style={{
+												fontSize: "small",
+												marginBottom: "5px",
+											}}
+										>
+											{chats[key].timestamp}
+										</div>
+										<div
+											style={{
+												fontSize: "medium",
+												fontWeight: "500",
+											}}
+										>
+											{chats[key].message}
+										</div>
+									</div>
 									<div
 										style={{
 											fontSize: "small",
-											marginBottom: "5px",
+											display: "flex",
+											flexDirection:
+												windowDimensions.width <= 700 &&
+												"column",
+											alignItems: "center",
+											justifyItems: "center",
 										}}
 									>
-										{chats[key].timestamp}
-										{/* (
-										{chats[key].uid.split(".").splice(-1)}) */}
-									</div>
-									<div
-										style={{
-											fontSize: "medium",
-											fontWeight: "500",
-										}}
-									>
-										{chats[key].message}
+										{likes.includes(key) ? (
+											<AiFillHeart
+												style={{
+													cursor: "pointer",
+												}}
+												onClick={() => dislike(key)}
+											/>
+										) : (
+											<AiOutlineHeart
+												style={{
+													cursor: "pointer",
+													marginTop: "1px",
+												}}
+												onClick={() => like(key)}
+											/>
+										)}
+										<span
+											style={{
+												marginLeft:
+													windowDimensions.width >
+														700 && "2px",
+											}}
+										>
+											{chats[key].like}
+										</span>
 									</div>
 								</div>
-								<div
-									style={{
-										fontSize: "small",
-										display: "flex",
-										flexDirection:
-											windowDimensions.width <= 700 &&
-											"column",
-										alignItems: "center",
-										justifyItems: "center",
-									}}
-								>
-									{likes.includes(key) ? (
-										<AiFillHeart
-											style={{
-												cursor: "pointer",
-											}}
-											onClick={() => dislike(key)}
-										/>
-									) : (
-										<AiOutlineHeart
-											style={{
-												cursor: "pointer",
-												marginTop: "1px",
-											}}
-											onClick={() => like(key)}
-										/>
-									)}
-									<span
-										style={{
-											marginLeft:
-												windowDimensions.width > 700 &&
-												"2px",
-										}}
-									>
-										{chats[key].like}
-									</span>
-								</div>
-							</div>
-						))}
+							))
+					) : (
+						<div style={{ padding: "2rem" }}>
+							<HashLoader color="white" size={30} />
+						</div>
+					)}
 				</div>
 			</div>
 			<ins
