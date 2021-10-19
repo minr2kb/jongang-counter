@@ -22,7 +22,7 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"sitemap": "babel-node ./yourpath/SitemapGenerator.js",
+		"sitemap": "babel-node ./src/SitemapGenerator.js",
 		"prebuild:development": "npm run sitemap"
 	},
 	"eslintConfig": {
