@@ -10,3 +10,5 @@ function generateSitemap() {
 		.build("https://jongang-counter.web.app/") // 업로드 되는 도메인 이름으로 변경해주세요.
 		.save("./public/sitemap.xml"); // sitemap.xml 파일이 생성될 위치입니다.
 }
+
+generateSitemap();
