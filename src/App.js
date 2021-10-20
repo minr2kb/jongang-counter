@@ -7,6 +7,8 @@ import { AiTwotoneCalendar, AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { database } from "./firebase";
 import { ref, push, onValue, update } from "firebase/database";
 import { getAuth, signInAnonymously, signOut } from "firebase/auth";
+import "./Paging.css";
+import Pagination from "react-js-pagination";
 import axios from "axios";
 
 function getWindowDimensions() {
@@ -49,6 +51,8 @@ function App() {
 	const [ip, setIP] = useState("000.000.000.000");
 	const [chats, setChats] = useState({});
 	const [likes, setLikes] = useState([]);
+	const [page, setPage] = useState(1);
+	const [itemsPerPage, setItemsPerPage] = useState(10);
 	const [windowDimensions, setWindowDimensions] = useState({
 		width: 500,
 		height: 500,
@@ -57,6 +61,10 @@ function App() {
 
 	const handleOnChange = e => {
 		setMsg(e.target.value);
+	};
+
+	const handlePageChange = page => {
+		setPage(page);
 	};
 
 	const enter = e => {
@@ -302,82 +310,99 @@ function App() {
 					{isLoaded ? (
 						Object.keys(chats)
 							.reverse()
-							.map(key => (
-								<div
-									className="chat-box"
-									style={{
-										display: "flex",
-										justifyContent: "space-between",
-										alignItems: "center",
-										width:
-											windowDimensions.width > 700
-												? "60vw"
-												: "85vw",
-									}}
-									key={chats[key].timestamp}
-								>
-									<div>
+							.map(
+								(key, idx) =>
+									(page - 1) * itemsPerPage <= idx &&
+									idx < page * itemsPerPage && (
 										<div
+											className="chat-box"
 											style={{
-												fontSize: "small",
-												marginBottom: "5px",
+												display: "flex",
+												justifyContent: "space-between",
+												alignItems: "center",
+												width:
+													windowDimensions.width > 700
+														? "60vw"
+														: "85vw",
 											}}
+											key={chats[key].timestamp}
 										>
-											{chats[key].timestamp}
-										</div>
-										<div
-											style={{
-												fontSize: "medium",
-												fontWeight: "500",
-											}}
-										>
-											{chats[key].message}
-										</div>
-									</div>
-									<div
-										style={{
-											fontSize: "small",
-											display: "flex",
-											flexDirection:
-												windowDimensions.width <= 700 &&
-												"column",
-											alignItems: "center",
-											justifyItems: "center",
-										}}
-									>
-										{likes.includes(key) ? (
-											<AiFillHeart
+											<div>
+												<div
+													style={{
+														fontSize: "small",
+														marginBottom: "5px",
+													}}
+												>
+													{chats[key].timestamp}
+												</div>
+												<div
+													style={{
+														fontSize: "medium",
+														fontWeight: "500",
+													}}
+												>
+													{chats[key].message}
+												</div>
+											</div>
+											<div
 												style={{
-													cursor: "pointer",
+													fontSize: "small",
+													display: "flex",
+													flexDirection:
+														windowDimensions.width <=
+															700 && "column",
+													alignItems: "center",
+													justifyItems: "center",
 												}}
-												onClick={() => dislike(key)}
-											/>
-										) : (
-											<AiOutlineHeart
-												style={{
-													cursor: "pointer",
-													marginTop: "1px",
-												}}
-												onClick={() => like(key)}
-											/>
-										)}
-										<span
-											style={{
-												marginLeft:
-													windowDimensions.width >
-														700 && "2px",
-											}}
-										>
-											{chats[key].like}
-										</span>
-									</div>
-								</div>
-							))
+											>
+												{likes.includes(key) ? (
+													<AiFillHeart
+														style={{
+															cursor: "pointer",
+														}}
+														onClick={() =>
+															dislike(key)
+														}
+													/>
+												) : (
+													<AiOutlineHeart
+														style={{
+															cursor: "pointer",
+															marginTop: "1px",
+														}}
+														onClick={() =>
+															like(key)
+														}
+													/>
+												)}
+												<span
+													style={{
+														marginLeft:
+															windowDimensions.width >
+																700 && "2px",
+													}}
+												>
+													{chats[key].like}
+												</span>
+											</div>
+										</div>
+									)
+							)
 					) : (
 						<div style={{ padding: "2rem" }}>
 							<HashLoader color="white" size={30} />
 						</div>
 					)}
+					<Pagination
+						activePage={page}
+						itemsCountPerPage={itemsPerPage}
+						totalItemsCount={Object.keys(chats).length}
+						pageRangeDisplayed={5}
+						prevPageText={"‹"}
+						nextPageText={"›"}
+						onChange={handlePageChange}
+					/>
 				</div>
 			</div>
 			<ins
