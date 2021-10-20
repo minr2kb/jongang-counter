@@ -306,7 +306,7 @@ function App() {
 					</div>
 				</div>
 
-				<div style={{ marginTop: "20px", marginBottom: "30px" }}>
+				<div style={{ marginTop: "20px", marginBottom: "10px" }}>
 					{isLoaded ? (
 						<div>
 							{Object.keys(chats)
