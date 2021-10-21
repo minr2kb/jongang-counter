@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef, useRef } from "react";
 import DatePicker from "react-datepicker";
 import HashLoader from "react-spinners/HashLoader";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,7 +10,6 @@ import { getAuth, signInAnonymously, signOut } from "firebase/auth";
 import "./Paging.css";
 import Pagination from "react-js-pagination";
 import axios from "axios";
-import { forwardRef } from "react";
 
 function getWindowDimensions() {
 	const { innerWidth: width, innerHeight: height } = window;
@@ -59,6 +58,7 @@ function App() {
 	});
 	const [isLoaded, setIsLoaded] = useState(false);
 	const itemsPerPage = 10;
+	const scrollRef = useRef();
 
 	const handleOnChange = e => {
 		setMsg(e.target.value);
@@ -66,6 +66,10 @@ function App() {
 
 	const handlePageChange = page => {
 		setPage(page);
+		scrollRef.current.scrollIntoView({
+			behavior: "smooth",
+			block: "start",
+		});
 	};
 
 	const enter = e => {
@@ -312,7 +316,7 @@ function App() {
 
 				<div style={{ marginTop: "20px", marginBottom: "10px" }}>
 					{isLoaded ? (
-						<div>
+						<div ref={scrollRef}>
 							{Object.keys(chats)
 								.reverse()
 								.map(
