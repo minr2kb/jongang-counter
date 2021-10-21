@@ -53,12 +53,12 @@ function App() {
 	const [chats, setChats] = useState({});
 	const [likes, setLikes] = useState([]);
 	const [page, setPage] = useState(1);
-	const [itemsPerPage, setItemsPerPage] = useState(10);
 	const [windowDimensions, setWindowDimensions] = useState({
 		width: 500,
 		height: 500,
 	});
 	const [isLoaded, setIsLoaded] = useState(false);
+	const itemsPerPage = 10;
 
 	const handleOnChange = e => {
 		setMsg(e.target.value);
