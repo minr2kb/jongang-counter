@@ -10,6 +10,7 @@ import { getAuth, signInAnonymously, signOut } from "firebase/auth";
 import "./Paging.css";
 import Pagination from "react-js-pagination";
 import axios from "axios";
+import { forwardRef } from "react";
 
 function getWindowDimensions() {
 	const { innerWidth: width, innerHeight: height } = window;
@@ -202,15 +203,15 @@ function App() {
 		return () => clearInterval(countdown);
 	}, [date]);
 
-	const CustomInput = ({ value, onClick }) => (
-		<div style={{ display: "flex", alignItems: "center" }}>
+	const CustomInput = forwardRef(({ value, onClick }, ref) => (
+		<div style={{ display: "flex", alignItems: "center" }} ref={ref}>
 			<div style={{ marginRight: "3px" }}>{value}</div>
 			<AiTwotoneCalendar
 				style={{ cursor: "pointer" }}
 				onClick={onClick}
 			/>
 		</div>
-	);
+	));
 
 	return (
 		<div>
@@ -257,21 +258,24 @@ function App() {
 							justifyContent: "center",
 						}}
 					>
-						<div style={{ marginRight: "5px" }}>종강 날짜:</div>
+						<div style={{ marginRight: "5px" }}>종강 일시:</div>
 						<div>
 							<DatePicker
-								dateFormat="yyyy-MM-dd"
+								dateFormat="yyyy-MM-dd HH:mm"
 								selected={date}
 								onChange={date => {
-									setDate(new Date(date.setHours(0, 0, 0)));
+									setDate(new Date(date));
 									localStorage.setItem(
 										"date",
-										new Date(
-											date.setHours(0, 0, 0)
-										).toString()
+										new Date(date).toString()
 									);
 								}}
 								customInput={<CustomInput />}
+								showTimeSelect
+								timeFormat="HH:mm"
+								timeIntervals={10}
+								timeCaption="time"
+								minDate={new Date()}
 							/>
 						</div>
 					</div>

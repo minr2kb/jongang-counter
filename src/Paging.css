@@ -9,8 +9,8 @@ ul {
 }
 ul.pagination li {
 	display: inline-block;
-	width: 35px;
-	height: 35px;
+	width: 30px;
+	height: 30px;
 	border: 1px solid #e2e2e2;
 	display: flex;
 	justify-content: center;
@@ -32,17 +32,17 @@ ul.pagination li.active a {
 	color: white;
 }
 ul.pagination li.active {
-	background-color: #f9bc60;
+	background-color: rgba(255, 255, 255, 0.3);
 }
 /* ul.pagination li a:hover, */
 
 ul.pagination li a:hover {
-	color: #f9bc60;
+	color: rgba(255, 255, 255, 0.7);
 }
 
-ul.pagination li.active a:hover {
+/* ul.pagination li.active a:hover {
 	color: #282c34;
-}
+} */
 
 .page-selection {
 	width: 48px;
